@@ -60,7 +60,7 @@ public class DummyAcceptingCardService<C,R> extends CardService<C,R>
     public R transmit(C apdu) throws CardServiceException {
         ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
     	
-    	String c = Hex.bytesToHexString( sc.accesC(apdu).getBytes());
+    	String c = Hex.bytesToHexString( sc.accessC(apdu).getBytes());
         String r = "9000";
         out.println("==> "+c);
         out.println("<== "+r);

@@ -67,7 +67,7 @@ public abstract class AbstractFileSystemStructured<C,R> implements FileSystemStr
         
         ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
 
-        IResponseAPDU r = sc.accesR(response);
+        IResponseAPDU r = sc.accessR(response);
         int respSW = r.getSW();
         byte[] respData = r.getData();
         

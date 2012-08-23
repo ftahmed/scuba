@@ -104,7 +104,7 @@ public class APDUFingerprint<C,R> implements CardFingerprint
 				
 				ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
 					
-				short sw = (short)(sc.accesR(rapdu).getSW());
+				short sw = (short)(sc.accessR(rapdu).getSW());
 				if (sw != ISO7816.SW_NO_ERROR) {
 					put(capdu, sw);
 				}
@@ -122,7 +122,7 @@ public class APDUFingerprint<C,R> implements CardFingerprint
 	 */
 	public void put(C capdu, R rapdu) {
 		ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
-		put(capdu, (short)(sc.accesR(rapdu).getSW() & 0xFFFF));
+		put(capdu, (short)(sc.accessR(rapdu).getSW() & 0xFFFF));
 	}
 	
 	/**
@@ -293,7 +293,7 @@ public class APDUFingerprint<C,R> implements CardFingerprint
 	private C getSimilarCommandAPDU(C capdu, APDUFingerprint<C,R> print) {
 		ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
 		for (C c: print.commandResponsePairs.keySet()) {
-			if ( sc.accesC(capdu).getINS() == sc.accesC(c).getINS()) { return c; }
+			if ( sc.accessC(capdu).getINS() == sc.accessC(c).getINS()) { return c; }
 		}
 		return null;
 	}
@@ -301,7 +301,7 @@ public class APDUFingerprint<C,R> implements CardFingerprint
 	private boolean isAllowedBy(C capdu, C otherCapdu) {
 		ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
 		
-		return isAllowedBy( sc.accesC(capdu).getINS(), sc.accesC(otherCapdu).getINS());
+		return isAllowedBy( sc.accessC(capdu).getINS(), sc.accessC(otherCapdu).getINS());
 	}
 
 	private static boolean isAllowedBy(int a, int b) {
@@ -328,7 +328,7 @@ public class APDUFingerprint<C,R> implements CardFingerprint
 			short sw = commandResponsePairs.get(c);
 			ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
 			
-			result.append(Hex.bytesToHexString( sc.accesC(c).getBytes()) + " -> " + Hex.shortToHexString((short)(sw & 0xFFFF)));
+			result.append(Hex.bytesToHexString( sc.accessC(c).getBytes()) + " -> " + Hex.shortToHexString((short)(sw & 0xFFFF)));
 			i++;
 			if (i < n) { result.append(", "); }
 		}
