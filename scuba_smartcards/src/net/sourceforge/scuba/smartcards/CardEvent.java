@@ -1,22 +1,22 @@
-/*
- * SCUBA smart card framework.
- *
- * Copyright (C) 2009  The SCUBA team.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * $Id: $
+/* 
+ * This file is part of the SCUBA smart card framework.
+ * 
+ * SCUBA is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software 
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * SCUBA is distributed in the hope that it will be useful, but WITHOUT ANY 
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * SCUBA. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Copyright (C) 2009-2012 The SCUBA team.
+ * 
+ * $Id$
  */
 
 package net.sourceforge.scuba.smartcards;
@@ -28,9 +28,9 @@ import java.util.EventObject;
  *
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  *
- * @version $Revision: $
+ * @version $Revision$
  */
-public class CardEvent<C, R> extends EventObject
+public class CardEvent extends EventObject
 {
 	private static final long serialVersionUID = -5645277246646615351L;
 
@@ -38,7 +38,7 @@ public class CardEvent<C, R> extends EventObject
 	public static final int REMOVED = 0, INSERTED = 1;
 
 	private int type;
-	private CardService<C, R> service;
+	private CardService service;
 
 	/**
 	 * Creates an event.
@@ -46,7 +46,7 @@ public class CardEvent<C, R> extends EventObject
 	 * @param type event type
 	 * @param service event source
 	 */
-	public CardEvent(int type, CardService<C, R> service) {
+	public CardEvent(int type, CardService service) {
 		super(service);
 		this.type = type;
 		this.service = service;
@@ -66,7 +66,7 @@ public class CardEvent<C, R> extends EventObject
 	 *
 	 * @return event source
 	 */
-	public CardService<C, R> getService() {
+	public CardService getService() {
 		return service;
 	}
 
@@ -93,8 +93,7 @@ public class CardEvent<C, R> extends EventObject
 			if (other == null) { return false; }
 			if (other == this) { return true; }
 			if (!other.getClass().equals(this.getClass())) { return false; }
-			@SuppressWarnings("unchecked")
-			CardEvent<C, R> otherCardEvent = (CardEvent<C, R>)other;
+			CardEvent otherCardEvent = (CardEvent)other;
 			return type == otherCardEvent.type && service.equals(otherCardEvent.service);
 		} catch (ClassCastException cce) {
 			return false;

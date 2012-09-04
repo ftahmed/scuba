@@ -1,22 +1,22 @@
-/*
- * SCUBA smart card framework.
- *
- * Copyright (C) 2009  The SCUBA team.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * $Id: $
+/* 
+ * This file is part of the SCUBA smart card framework.
+ * 
+ * SCUBA is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software 
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * SCUBA is distributed in the hope that it will be useful, but WITHOUT ANY 
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * SCUBA. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Copyright (C) 2009-2012 The SCUBA team.
+ * 
+ * $Id$
  */
 
 package net.sourceforge.scuba.smartcards;
@@ -31,18 +31,18 @@ import java.util.HashSet;
  * 
  * @author Cees-Bart Breunesse (ceesb@cs.ru.nl)
  * @author Martijn Oostdijk (martijno@cs.ru.nl)
- * @version $Revision: 259 $
+ * @author Pim Vullers (pim@cs.ru.nl)
+ * 
+ * @version $Revision$
  */
-public abstract class CardService<C,R> implements Serializable
-{
+public abstract class CardService implements Serializable {
 	private static final long serialVersionUID = 5618527358158494957L;
 
 	static protected final int SESSION_STOPPED_STATE = 0;
-
 	static protected final int SESSION_STARTED_STATE = 1;
 
 	/** The apduListeners. */
-	private Collection<APDUListener<C,R>> apduListeners;
+	private Collection<APDUListener> apduListeners;
 
 	/*
 	 * @ invariant state == SESSION_STOPPED_STATE || state ==
@@ -54,7 +54,7 @@ public abstract class CardService<C,R> implements Serializable
 	 * Creates a new service.
 	 */
 	public CardService() {
-		apduListeners = new HashSet<APDUListener<C,R>>();
+		apduListeners = new HashSet<APDUListener>();
 		state = SESSION_STOPPED_STATE;
 	}
 
@@ -63,7 +63,7 @@ public abstract class CardService<C,R> implements Serializable
 	 * 
 	 * @param l the listener to add
 	 */
-	public void addAPDUListener(APDUListener<C,R> l) {
+	public void addAPDUListener(APDUListener l) {
 		if (apduListeners != null) { apduListeners.add(l); }
 	}
 
@@ -72,8 +72,20 @@ public abstract class CardService<C,R> implements Serializable
 	 * 
 	 * @param l the listener to remove
 	 */
-	public void removeAPDUListener(APDUListener<C,R> l) {
+	public void removeAPDUListener(APDUListener l) {
 		if (apduListeners != null) { apduListeners.remove(l); }
+	}
+
+	/**
+	 * Notifies listeners about APDU event.
+	 * 
+	 * @param capdu APDU event
+	 */
+	protected void notifyExchangedAPDU(int count, ICommandAPDU capdu, IResponseAPDU rapdu) {
+		for (APDUListener listener: apduListeners) {
+			listener.exchangedAPDU(
+					new APDUEvent(this, "RAW", count, capdu, rapdu));
+		}
 	}
 
 	/**
@@ -86,13 +98,17 @@ public abstract class CardService<C,R> implements Serializable
 	 */
 	public abstract void open() throws CardServiceException;
 
+	/**
+	 * Whether there is a session started with the card.
+	 */
 	/*
 	 * @ ensures \result == (state == SESSION_STARTED_STATE);
 	 */
 	public abstract boolean isOpen();
 
 	/**
-	 * Sends and apdu to the card. Notifies any interested apduListeners.
+	 * Sends an apdu to the card. Notifies any interested apduListeners.
+	 * 
 	 * This method does not throw a CardServiceException if the ResponseAPDU
 	 * is status word indicating error.
 	 * 
@@ -101,30 +117,18 @@ public abstract class CardService<C,R> implements Serializable
 	 * @throws CardServiceException - if the card operation failed 
 	 */
 	/*
-	 * @ requires state == SESSION_STARTED_STATE; @ ensures state ==
-	 * SESSION_STARTED_STATE;
+	 * @ requires state == SESSION_STARTED_STATE; 
+	 * @ ensures state == SESSION_STARTED_STATE;
 	 */
-	public abstract R transmit(C apdu) throws CardServiceException;
+	public abstract IResponseAPDU transmit(ICommandAPDU apdu) throws CardServiceException;
 
 	/**
 	 * Closes the session with the card. Disconnects from the card and reader.
 	 * Notifies any interested apduListeners.
 	 */
 	/*
-	 * @ requires state == SESSION_STARTED_STATE; @ ensures state ==
-	 * SESSION_STOPPED_STATE;
+	 * @ requires state == SESSION_STARTED_STATE; 
+	 * @ ensures state == SESSION_STOPPED_STATE;
 	 */
 	public abstract void close();
-
-
-	/**
-	 * Notifies listeners about APDU event.
-	 * 
-	 * @param capdu APDU event
-	 */
-	protected void notifyExchangedAPDU(int count, C capdu, R rapdu) {
-		for (APDUListener<C,R> listener: apduListeners) {
-			listener.exchangedAPDU(new APDUEvent<C,R>(this, "RAW", count, capdu, rapdu));
-		}
-	}
 }

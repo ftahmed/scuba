@@ -1,22 +1,22 @@
-/*
- * SCUBA smart card framework.
- *
- * Copyright (C) 2009  The SCUBA team.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * $Id: $
+/* 
+ * This file is part of the SCUBA smart card framework.
+ * 
+ * SCUBA is free software: you can redistribute it and/or modify it under the 
+ * terms of the GNU General Public License as published by the Free Software 
+ * Foundation, either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * SCUBA is distributed in the hope that it will be useful, but WITHOUT ANY 
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * SCUBA. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Copyright (C) 2009-2012 The SCUBA team.
+ * 
+ * $Id$
  */
 
 package net.sourceforge.scuba.smartcards;
@@ -32,7 +32,7 @@ import net.sourceforge.scuba.util.Hex;
  * @author Wojciech Mostowski <woj@cs.ru.nl>
  *
  */
-public class DummyAcceptingCardService<C,R> extends CardService<C,R>
+public class DummyAcceptingCardService extends CardService
 {
 	private static final long serialVersionUID = 959248891375637853L;
 
@@ -57,14 +57,13 @@ public class DummyAcceptingCardService<C,R> extends CardService<C,R>
     public void open() throws CardServiceException {
     }
 
-    public R transmit(C apdu) throws CardServiceException {
-        ScubaSmartcards<C, R> sc = ScubaSmartcards.getInstance();
+    public IResponseAPDU transmit(ICommandAPDU apdu) throws CardServiceException {
     	
-    	String c = Hex.bytesToHexString( sc.accessC(apdu).getBytes());
+    	String c = Hex.bytesToHexString( apdu.getBytes());
         String r = "9000";
         out.println("==> "+c);
         out.println("<== "+r);
-        R response = sc.createResponseAPDU(Hex.hexStringToBytes(r));
+        IResponseAPDU response = new ResponseAPDU(Hex.hexStringToBytes(r));
         return response;
     }
 
