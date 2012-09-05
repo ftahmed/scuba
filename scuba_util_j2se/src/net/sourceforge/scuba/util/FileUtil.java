@@ -33,7 +33,7 @@ import javax.swing.filechooser.FileFilter;
  * 
  * @author The JMRTD team (info@jmrtd.org)
  * 
- * @version $Id$
+ * @version $Revision$
  */
 public class FileUtil {
 

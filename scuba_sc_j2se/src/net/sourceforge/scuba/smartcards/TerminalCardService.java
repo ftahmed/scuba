@@ -25,8 +25,6 @@ import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
-import javax.smartcardio.CommandAPDU;
-import javax.smartcardio.ResponseAPDU;
 
 /**
  * Card service implementation for sending APDUs to a terminal using the
@@ -37,8 +35,8 @@ import javax.smartcardio.ResponseAPDU;
  * 
  * @version $Revision$
  */
-public class TerminalCardService extends CardService<CommandAPDU, ResponseAPDU>
-{
+public class TerminalCardService extends CardService {
+
 	private static final long serialVersionUID = 7918176921505623791L;
 
 	private CardTerminal terminal;
@@ -57,19 +55,27 @@ public class TerminalCardService extends CardService<CommandAPDU, ResponseAPDU>
 		lastActiveTime = System.currentTimeMillis();
 		apduCount = 0;
 	}
-
+	
+	/**
+	 * Opens a session with the card.
+	 */
 	public void open() throws CardServiceException {
 		if (isOpen()) { return; }
 		try {
 			card = terminal.connect("*");
 			channel = card.getBasicChannel();
-			if (channel == null) { throw new CardServiceException("channel == null"); }
+			if (channel == null) { 
+				throw new CardServiceException("channel == null"); 
+			}
 			state = SESSION_STARTED_STATE;
 		} catch (CardException ce) {
 			throw new CardServiceException(ce.toString());
 		}
 	}
 
+	/**
+	 * Whether there is an open session with the card.
+	 */
 	public boolean isOpen() {
 		return (state != SESSION_STOPPED_STATE);
 	}
@@ -81,15 +87,37 @@ public class TerminalCardService extends CardService<CommandAPDU, ResponseAPDU>
 	 * @return the response from the card, including the status word
 	 * @throws CardServiceException - if the card operation failed 
 	 */
-	public ResponseAPDU transmit(CommandAPDU ourCommandAPDU) throws CardServiceException {
+	public IResponseAPDU transmit(ICommandAPDU ourCommandAPDU) 
+	throws CardServiceException {
 		try {
 			if (channel == null) {
 				throw new CardServiceException("channel == null");
 			}
-			ResponseAPDU ourResponseAPDU = channel.transmit(ourCommandAPDU);
+			javax.smartcardio.CommandAPDU command = 
+					new javax.smartcardio.CommandAPDU(ourCommandAPDU.getBytes());
+			javax.smartcardio.ResponseAPDU response = channel.transmit(command);
+			IResponseAPDU ourResponseAPDU = new ResponseAPDU(response.getBytes());
 			notifyExchangedAPDU(++apduCount, ourCommandAPDU, ourResponseAPDU);
 			lastActiveTime = System.currentTimeMillis();
 			return ourResponseAPDU;
+		} catch (CardException ce) {
+			ce.printStackTrace();
+			throw new CardServiceException(ce.toString());
+		}
+	}
+
+	/**
+	 * Sends a control command to the terminal
+	 *
+	 * @param controlCode the control code to send
+	 * @param command the command data for the terminal
+	 * @return response from the terminal/card
+	 * @throws CardServiceException - if the card operation failed
+	 */
+	public byte[] transmitControlCommand(int controlCode, byte[] command)
+	throws CardServiceException {
+		try {
+			return card.transmitControlCommand(controlCode, command);
 		} catch (CardException ce) {
 			ce.printStackTrace();
 			throw new CardServiceException(ce.toString());
