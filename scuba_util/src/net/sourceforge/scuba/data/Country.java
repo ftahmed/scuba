@@ -31,8 +31,8 @@ import java.util.List;
  * 
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public abstract class Country
-{	
+public abstract class Country {
+
 	private static final Class<?>[] SUB_CLASSES = { ISOCountry.class, TestCountry.class };
 
 	public static Country getInstance(int code) {

@@ -28,8 +28,8 @@ package net.sourceforge.scuba.data;
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  * @author Cees-Bart Breunesse (ceesb@riscure.com)
  */
-public enum Gender
-{
+public enum Gender {
+
 	MALE { public int toInt() { return 0x01; } }, 
 	FEMALE {public int toInt() { return 0x02; }}, 
 	UNKNOWN { public int toInt() { return 0x03; } }, 

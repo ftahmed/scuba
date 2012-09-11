@@ -34,18 +34,18 @@ import java.io.OutputStream;
  */
 public class TLVOutputStream extends OutputStream {
 
-	private DataOutputStream out;
+	private DataOutputStream outputStream;
 	private TLVOutputState state;
 
 	public TLVOutputStream(OutputStream outputStream) {
-		this.out = outputStream instanceof DataOutputStream ? (DataOutputStream)outputStream : new DataOutputStream(outputStream);
+		this.outputStream = outputStream instanceof DataOutputStream ? (DataOutputStream)outputStream : new DataOutputStream(outputStream);
 		this.state = new TLVOutputState();
 	}
 
 	public void writeTag(int tag) throws IOException {
 		byte[] tagAsBytes = TLVUtil.getTagAsBytes(tag);
 		if (state.canBeWritten()) {
-			out.write(tagAsBytes);
+			outputStream.write(tagAsBytes);
 		}
 		state.setTagProcessed(tag);
 	}
@@ -54,7 +54,7 @@ public class TLVOutputStream extends OutputStream {
 		byte[] lengthAsBytes = TLVUtil.getLengthAsBytes(length);
 		state.setLengthProcessed(length);
 		if (state.canBeWritten()) {
-			out.write(lengthAsBytes);
+			outputStream.write(lengthAsBytes);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class TLVOutputStream extends OutputStream {
 		}
 		state.updateValueBytesProcessed(bytes, offset, length);
 		if (state.canBeWritten()) {
-			out.write(bytes, offset, length);
+			outputStream.write(bytes, offset, length);
 		}
 	}
 
@@ -111,19 +111,19 @@ public class TLVOutputStream extends OutputStream {
 		state.updatePreviousLength(length);
 		if (state.canBeWritten()) {
 			byte[] lengthAsBytes = TLVUtil.getLengthAsBytes(length);
-			out.write(lengthAsBytes);
-			out.write(bufferedValueBytes);
+			outputStream.write(lengthAsBytes);
+			outputStream.write(bufferedValueBytes);
 		}
 	}
 
 	public void flush() throws IOException {
-		out.flush();
+		outputStream.flush();
 	}
 
 	public void close() throws IOException {
 		if (!state.canBeWritten()) {
 			throw new IllegalStateException("Cannot close stream yet, illegal TLV state.");
 		}
-		out.close();
+		outputStream.close();
 	}
 }

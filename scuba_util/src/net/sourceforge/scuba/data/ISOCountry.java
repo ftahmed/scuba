@@ -31,8 +31,8 @@ import java.io.Serializable;
  * 
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public class ISOCountry extends Country implements Serializable
-{
+public class ISOCountry extends Country implements Serializable {
+
 	private static final long serialVersionUID = 7220597933847617859L;
 
 	public static final Country
@@ -308,7 +308,7 @@ public class ISOCountry extends Country implements Serializable
 	private String alpha3Code;
 	private String name;
 
-	ISOCountry(int code, String alpha2Code, String alpha3Code, String name) {
+	private ISOCountry(int code, String alpha2Code, String alpha3Code, String name) {
 		this.code = code;
 		this.alpha2Code = alpha2Code;
 		this.alpha3Code = alpha3Code;
