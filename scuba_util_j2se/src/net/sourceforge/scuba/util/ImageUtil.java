@@ -81,7 +81,7 @@ public class ImageUtil {
 		while (readers.hasNext()) {
 			try {
 				ImageReader reader = readers.next();
-				LOGGER.info("Using image reader " + reader + " for type " + mimeType);
+//				LOGGER.info("Using image reader " + reader + " for type " + mimeType);
 				BufferedImage image = read(iis, imageLength, reader);
 				if (image != null) { return image; }
 			} catch (Exception e) {
