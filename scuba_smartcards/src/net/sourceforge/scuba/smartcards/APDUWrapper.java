@@ -39,7 +39,7 @@ public interface APDUWrapper
     *           not specified).
     * @return wrapped apdu buffer
     */
-   ICommandAPDU wrap(ICommandAPDU capdu);
+   CommandAPDU wrap(CommandAPDU capdu);
    
-   IResponseAPDU unwrap(IResponseAPDU rapdu, int len);
+   ResponseAPDU unwrap(ResponseAPDU rapdu, int len);
 }

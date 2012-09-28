@@ -45,7 +45,7 @@ import javax.smartcardio.CardChannel;
  * @author  Andreas Sterbenz
  * @author  JSR 268 Expert Group
  */
-public final class ResponseAPDU implements java.io.Serializable, IResponseAPDU {
+public final class ResponseAPDU implements java.io.Serializable {
 
     private static final long serialVersionUID = 6962744978375594225L;
 

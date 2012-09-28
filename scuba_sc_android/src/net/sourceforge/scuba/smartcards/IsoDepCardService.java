@@ -24,9 +24,9 @@
 
 package net.sourceforge.scuba.smartcards;
 
-import android.nfc.tech.IsoDep;
-
 import java.io.IOException;
+
+import android.nfc.tech.IsoDep;
 
 /**
  * Card service implementation for sending APDUs to a terminal using the
@@ -90,13 +90,13 @@ public class IsoDepCardService extends CardService {
 	 * @return the response from the card, including the status word
 	 * @throws CardServiceException - if the card operation failed 
 	 */
-    public IResponseAPDU transmit(ICommandAPDU ourCommandAPDU) 
+    public ResponseAPDU transmit(CommandAPDU ourCommandAPDU) 
     throws CardServiceException {
         try {
         	if (!nfc.isConnected()) {
         		throw new CardServiceException("not connected");
         	}
-        	IResponseAPDU ourResponseAPDU = new ResponseAPDU(
+        	ResponseAPDU ourResponseAPDU = new ResponseAPDU(
         			nfc.transceive(ourCommandAPDU.getBytes()));
 			notifyExchangedAPDU(++apduCount, ourCommandAPDU, ourResponseAPDU);
 			return ourResponseAPDU;

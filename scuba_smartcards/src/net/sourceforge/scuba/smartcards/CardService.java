@@ -81,7 +81,7 @@ public abstract class CardService implements Serializable {
 	 * 
 	 * @param capdu APDU event
 	 */
-	protected void notifyExchangedAPDU(int count, ICommandAPDU capdu, IResponseAPDU rapdu) {
+	protected void notifyExchangedAPDU(int count, CommandAPDU capdu, ResponseAPDU rapdu) {
 		for (APDUListener listener: apduListeners) {
 			listener.exchangedAPDU(
 					new APDUEvent(this, "RAW", count, capdu, rapdu));
@@ -120,7 +120,7 @@ public abstract class CardService implements Serializable {
 	 * @ requires state == SESSION_STARTED_STATE; 
 	 * @ ensures state == SESSION_STARTED_STATE;
 	 */
-	public abstract IResponseAPDU transmit(ICommandAPDU apdu) throws CardServiceException;
+	public abstract ResponseAPDU transmit(CommandAPDU apdu) throws CardServiceException;
 
 	/**
 	 * Closes the session with the card. Disconnects from the card and reader.

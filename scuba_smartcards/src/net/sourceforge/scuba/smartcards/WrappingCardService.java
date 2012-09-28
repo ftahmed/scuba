@@ -49,10 +49,10 @@ public class WrappingCardService extends CardService {
 		return service.isOpen();
 	}
 
-	public IResponseAPDU transmit(ICommandAPDU capdu)
+	public ResponseAPDU transmit(CommandAPDU capdu)
 	throws CardServiceException {
 		if (isEnabled()) {
-			IResponseAPDU rapdu = service.transmit(wrapper.wrap(capdu));
+			ResponseAPDU rapdu = service.transmit(wrapper.wrap(capdu));
 			return wrapper.unwrap(rapdu, rapdu.getBytes().length);
 		} else {
 			return service.transmit(capdu);
