@@ -23,7 +23,10 @@ package net.sourceforge.scuba.smartcards;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Default abstract service. Provides some functionality for observing apdu
@@ -41,6 +44,15 @@ public abstract class CardService implements Serializable {
 	static protected final int SESSION_STOPPED_STATE = 0;
 	static protected final int SESSION_STARTED_STATE = 1;
 
+	
+	private static final Map<String, String> objectToServiceMap;
+	static {
+		objectToServiceMap = new HashMap<String, String>();
+		objectToServiceMap.put("javax.smartcardio.CardTerminal", "net.sourceforge.scuba.smartcards.TerminalCardService");
+		objectToServiceMap.put("android.nfc.tech.IsoDep", "net.sourceforge.scuba.smartcards.IsoDepCardService");
+	}
+
+	
 	/** The apduListeners. */
 	private Collection<APDUListener> apduListeners;
 
@@ -49,6 +61,26 @@ public abstract class CardService implements Serializable {
 	 * SESSION_STARTED_STATE;
 	 */
 	protected int state;
+
+	public static CardService getInstance(Object object) {
+		if (object == null) { throw new IllegalArgumentException(); }
+		Class<?> objectClass = object.getClass();
+		String objectClassName = objectClass.getCanonicalName();
+		for (Entry<String, String> entry: objectToServiceMap.entrySet()) {
+			String targetObjectClassName = entry.getKey();
+			String serviceClassName = entry.getValue();
+			if (targetObjectClassName.equals(objectClassName)) {
+				try {
+					Class<?> cardServiceClass = Class.forName(serviceClassName);
+					return (CardService)cardServiceClass.getConstructor(objectClass).newInstance(object);
+				} catch (Exception e) {
+					throw new IllegalArgumentException(e);
+				}
+				
+			}
+		}
+		throw new IllegalArgumentException("Could not find a CardService for object of class \"" + objectClassName + "\"");
+	}
 
 	/**
 	 * Creates a new service.
