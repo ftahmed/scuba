@@ -142,10 +142,10 @@ public class TLVInputStream extends InputStream {
 			state.setLengthProcessed(length, bytesRead);
 
 			/* We're buffering our carrier inputstream now that we know max length */
-			if (bufferSize < length && length < MAX_BUFFER_LENGTH) {
-				bufferSize = length;
-				this.inputStream = new DataInputStream(new BufferedInputStream(originalInputStream, bufferSize));
-			}
+//			if (bufferSize < length && length < MAX_BUFFER_LENGTH) {
+//				bufferSize = length;
+//				this.inputStream = new DataInputStream(new BufferedInputStream(originalInputStream, bufferSize));
+//			}
 
 			return length;
 		} catch (IOException e) {
