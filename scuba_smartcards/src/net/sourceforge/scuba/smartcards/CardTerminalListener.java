@@ -30,8 +30,8 @@ import java.util.EventListener;
  *
  * @version $Revision$
  */
-public interface CardTerminalListener extends EventListener
-{
+public interface CardTerminalListener extends EventListener {
+
 	/**
 	 * Called when card inserted.
 	 *

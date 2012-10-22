@@ -30,6 +30,7 @@ package net.sourceforge.scuba.smartcards;
  */
 
 public class CardServiceException extends Exception {
+
 	private static final long serialVersionUID = 4489156194716970879L;
 
 	/**

@@ -28,8 +28,8 @@ package net.sourceforge.scuba.smartcards;
  * 
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public interface FileSystemStructured
-{
+public interface FileSystemStructured {
+
 	/**
 	 * Selects a file.
 	 * 

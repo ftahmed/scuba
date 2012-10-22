@@ -30,8 +30,8 @@ import java.util.Arrays;
  * 
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public class CardFileInputStream extends InputStream
-{
+public class CardFileInputStream extends InputStream {
+
 	private FileInfo[] path;
 	private final byte[] buffer;
 	private int bufferLength;

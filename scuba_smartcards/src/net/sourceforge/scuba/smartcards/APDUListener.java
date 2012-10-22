@@ -30,8 +30,8 @@ import java.util.EventListener;
  * @author Martijn Oostdijk (martijno@cs.ru.nl)
  * @version $Revision$
  */
-public interface APDUListener extends EventListener
-{
+public interface APDUListener extends EventListener {
+
    /**
     * Is called after an apdu was exchanged.
     * 

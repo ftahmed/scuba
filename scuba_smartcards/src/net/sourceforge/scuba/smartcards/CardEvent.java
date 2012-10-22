@@ -30,8 +30,8 @@ import java.util.EventObject;
  *
  * @version $Revision$
  */
-public class CardEvent extends EventObject
-{
+public class CardEvent extends EventObject {
+
 	private static final long serialVersionUID = -5645277246646615351L;
 
 	/** Event type constant. */

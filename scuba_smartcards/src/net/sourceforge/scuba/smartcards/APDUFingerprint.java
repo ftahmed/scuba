@@ -45,8 +45,8 @@ import net.sourceforge.scuba.util.Hex;
  * @author Henning Richter (hrichter@fh-lausitz.de)
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public class APDUFingerprint implements CardFingerprint
-{
+public class APDUFingerprint implements CardFingerprint {
+
 	/** The fingerprint directory contains txt and png files. We only consider the txt ones. */
 	@SuppressWarnings("unused")
 	private static final FilenameFilter HENNING_FILE_FILENAME_FILTER = new FilenameFilter() {

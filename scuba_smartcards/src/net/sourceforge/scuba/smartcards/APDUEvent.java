@@ -23,8 +23,8 @@ package net.sourceforge.scuba.smartcards;
 
 import java.util.EventObject;
 
-public class APDUEvent extends EventObject
-{
+public class APDUEvent extends EventObject {
+
 	private static final long serialVersionUID = 7152351242541552732L;
 
 	private Object type;

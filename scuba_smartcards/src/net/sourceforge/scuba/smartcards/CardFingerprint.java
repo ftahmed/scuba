@@ -30,7 +30,7 @@ import java.util.Properties;
  * 
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public interface CardFingerprint
-{
+public interface CardFingerprint {
+
 	Properties guessProperties();
 }

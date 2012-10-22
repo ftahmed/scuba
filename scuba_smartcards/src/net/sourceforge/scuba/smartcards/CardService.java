@@ -40,6 +40,7 @@ import java.util.Map.Entry;
  * @version $Revision$
  */
 public abstract class CardService implements Serializable {
+
 	private static final long serialVersionUID = 5618527358158494957L;
 
 	static protected final int SESSION_STOPPED_STATE = 0;

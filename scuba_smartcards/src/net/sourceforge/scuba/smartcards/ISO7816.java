@@ -28,8 +28,8 @@ package net.sourceforge.scuba.smartcards;
  * @author Martijn Oostdijk (martijno@cs.ru.nl)
  * @version $Revision$
  */
-public interface ISO7816
-{
+public interface ISO7816 {
+
    static final byte OFFSET_CLA = (byte)0;
    static final byte OFFSET_INS = (byte)1;
    static final byte OFFSET_P1 = (byte)2;

@@ -32,8 +32,8 @@ import net.sourceforge.scuba.util.Hex;
  * @author Wojciech Mostowski <woj@cs.ru.nl>
  *
  */
-public class DummyAcceptingCardService extends CardService
-{
+public class DummyAcceptingCardService extends CardService {
+
 	private static final long serialVersionUID = 959248891375637853L;
 
 	private transient PrintStream out = null;

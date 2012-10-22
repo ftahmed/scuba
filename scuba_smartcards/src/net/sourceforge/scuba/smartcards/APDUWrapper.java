@@ -29,8 +29,8 @@ package net.sourceforge.scuba.smartcards;
  * 
  * @version $Revision$
  */
-public interface APDUWrapper
-{
+public interface APDUWrapper {
+
    /**
     * Wraps the command apdu buffer.
     * 

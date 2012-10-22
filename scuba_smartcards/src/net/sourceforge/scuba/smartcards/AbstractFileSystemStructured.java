@@ -31,7 +31,7 @@ package net.sourceforge.scuba.smartcards;
  * @author woj
  */
 public abstract class AbstractFileSystemStructured implements FileSystemStructured {
-    
+
     public static short MF_ID = 0x3F00;
     
     private CardService service = null;

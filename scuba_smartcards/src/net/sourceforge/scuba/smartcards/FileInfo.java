@@ -28,8 +28,8 @@ package net.sourceforge.scuba.smartcards;
  *
  * @author Martijn Oostdijk (martijn.oostdijk@gmail.com)
  */
-public abstract class FileInfo
-{
+public abstract class FileInfo {
+
 	public abstract short getFID();
 	
 	public abstract int getFileLength();
