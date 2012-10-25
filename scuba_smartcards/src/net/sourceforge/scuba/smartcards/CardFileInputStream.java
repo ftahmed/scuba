@@ -43,36 +43,40 @@ public class CardFileInputStream extends InputStream {
 
 	public CardFileInputStream(int maxBlockSize, FileSystemStructured fs) throws CardServiceException {
 		this.fs = fs;
-		FileInfo[] fsPath = fs.getSelectedPath();
-		if (fsPath == null || fsPath.length < 1) { throw new CardServiceException("No valid file selected"); }
-		this.path = new FileInfo[fsPath.length];
-		System.arraycopy(fsPath, 0, this.path, 0, fsPath.length);
-		fileLength = fsPath[fsPath.length - 1].getFileLength();
-		buffer = new byte[maxBlockSize];
-		bufferLength = 0;
-		offsetBufferInFile = 0;
-		offsetInBuffer = 0;
-		markedOffset = -1;
+		synchronized(fs) {
+			FileInfo[] fsPath = fs.getSelectedPath();
+			if (fsPath == null || fsPath.length < 1) { throw new CardServiceException("No valid file selected"); }
+			this.path = new FileInfo[fsPath.length];
+			System.arraycopy(fsPath, 0, this.path, 0, fsPath.length);
+			fileLength = fsPath[fsPath.length - 1].getFileLength();
+			buffer = new byte[maxBlockSize];
+			bufferLength = 0;
+			offsetBufferInFile = 0;
+			offsetInBuffer = 0;
+			markedOffset = -1;
+		}
 	}
 
 	public int read() throws IOException {
-		int offsetInFile = offsetBufferInFile + offsetInBuffer;
-		if (offsetInFile >= fileLength) {
-			return -1;
-		}
-		if (offsetInBuffer >= bufferLength) {
-			int le = Math.min(buffer.length, fileLength - offsetInFile);
-			try {
-				offsetBufferInFile += bufferLength;
-				offsetInBuffer = 0;
-				bufferLength = fillBufferFromFile(path, offsetBufferInFile, le);
-			} catch (CardServiceException cse) {
-				throw new IOException(cse.toString());
+		synchronized(fs) {
+			int offsetInFile = offsetBufferInFile + offsetInBuffer;
+			if (offsetInFile >= fileLength) {
+				return -1;
 			}
+			if (offsetInBuffer >= bufferLength) {
+				int le = Math.min(buffer.length, fileLength - offsetInFile);
+				try {
+					offsetBufferInFile += bufferLength;
+					offsetInBuffer = 0;
+					bufferLength = fillBufferFromFile(path, offsetBufferInFile, le);
+				} catch (CardServiceException cse) {
+					throw new IOException(cse.toString());
+				}
+			}
+			int result = buffer[offsetInBuffer] & 0xFF;
+			offsetInBuffer++;
+			return result;
 		}
-		int result = buffer[offsetInBuffer] & 0xFF;
-		offsetInBuffer++;
-		return result;
 	}
 
 	public long skip(long n) {
@@ -137,7 +141,7 @@ public class CardFileInputStream extends InputStream {
 	 * @return the contents of the file.
 	 */
 	private int fillBufferFromFile(FileInfo[] path, int offsetInFile, int le)
-	throws CardServiceException {
+			throws CardServiceException {
 		synchronized (fs) {
 			if (le > buffer.length) {
 				throw new IllegalArgumentException("length too big");
