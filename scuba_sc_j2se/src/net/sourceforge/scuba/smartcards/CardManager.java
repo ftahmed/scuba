@@ -53,8 +53,8 @@ import javax.smartcardio.TerminalFactory;
  * 
  * @version $Revision$
  */
-public class CardManager
-{
+public class CardManager {
+
 	private static final CardManager INSTANCE = new CardManager();
 	private static final int FACTORY_POLL_INTERVAL = 950;
 	private static final int TERMINAL_POLL_INTERVAL = 450;
@@ -767,7 +767,7 @@ public class CardManager
 							} else {
 								try {
 									isCardPresent = terminal.isCardPresent();
-								} catch (IllegalStateException ise) {
+								} catch (Exception ise) {
 									isCardPresent = false;
 								}
 							}
