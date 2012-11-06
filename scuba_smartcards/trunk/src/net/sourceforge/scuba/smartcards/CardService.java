@@ -78,7 +78,6 @@ public abstract class CardService implements Serializable {
 					} catch (Exception e) {
 						throw new IllegalArgumentException(e);
 					}
-
 				}
 			} catch (ClassNotFoundException cnfe) {
 				continue;
